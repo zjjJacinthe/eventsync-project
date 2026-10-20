@@ -1,0 +1,24 @@
+const results = [
+ {label:'π₀.₅',values:[17.9,28.8,17.0,17.2,8.8]},
+ {label:'GroundSG + QwenVL',values:[32.7,38.0,39.3,31.6,21.9]},
+ {label:'MemER',values:[42.4,48.8,53.2,38.0,29.5]},
+ {label:'FrameSamp+Modul',values:[44.5,65.2,25.1,36.3,51.4]},
+ {label:'EventSync',ours:true,values:[62.0,77.5,66.5,65.5,38.5]},
+ {label:'EventSync + FrameSamp+Modul',ours:true,main:true,values:[64.5,76.0,70.5,67.0,44.5]}
+];
+const chart=document.querySelector('#result-chart');
+function renderChart(category){chart.replaceChildren();for(const result of results){const row=document.createElement('div');row.className='chart-row'+(result.ours?' ours':'')+(result.main?' main':'');const label=document.createElement('span');label.textContent=result.label;const track=document.createElement('div');track.className='bar-track';track.setAttribute('aria-hidden','true');const bar=document.createElement('div');bar.className='bar';bar.style.width=result.values[category]+'%';track.append(bar);const value=document.createElement('span');value.className='chart-value';value.textContent=result.values[category].toFixed(1)+'%';row.append(label,track,value);chart.append(row)}}
+renderChart(0);
+for(const button of document.querySelectorAll('[data-category]'))button.addEventListener('click',()=>{for(const other of document.querySelectorAll('[data-category]')){other.classList.toggle('active',other===button);other.setAttribute('aria-pressed',String(other===button))}renderChart(Number(button.dataset.category))});
+const tasks=[{"task":"BinFill","values":[30.0,52.0,56.7,39.6,76.0,78.0]},{"task":"PickXtimes","values":[42.9,92.7,79.3,87.3,100.0,100.0]},{"task":"SwingXtimes","values":[35.6,7.3,59.3,92.0,94.0,96.0]},{"task":"StopCube","values":[6.7,0.0,0.0,42.0,40.0,30.0]},{"task":"VideoUnmask","values":[20.4,88.7,81.3,32.7,96.0,98.0]},{"task":"ButtonUnmask","values":[22.2,24.0,72.0,25.1,82.0,100.0]},{"task":"VideoUnmaskSwap","values":[18.7,30.7,38.0,24.4,56.0,60.0]},{"task":"ButtonUnmaskSwap","values":[6.7,14.0,21.3,18.2,32.0,24.0]},{"task":"PickHighlight","values":[11.3,15.1,70.7,22.9,66.0,68.0]},{"task":"VideoRepick","values":[0.4,25.3,25.3,30.4,42.0,44.0]},{"task":"VideoPlaceButton","values":[31.1,54.0,30.0,60.0,84.0,84.0]},{"task":"VideoPlaceOrder","values":[25.8,31.8,26.0,32.0,70.0,72.0]},{"task":"MoveCube","values":[26.0,71.6,82.7,77.8,84.0,86.0]},{"task":"InsertPeg","values":[1.6,3.3,6.7,7.6,14.0,26.0]},{"task":"PatternLock","values":[2.9,6.7,16.7,53.6,40.0,40.0]},{"task":"RouteStick","values":[4.7,6.0,12.0,66.7,16.0,26.0]},{"task":"Overall","values":[17.9,32.7,42.4,44.5,62.0,64.5]}];
+for(const task of tasks){const row=document.createElement('tr');const name=document.createElement('th');name.scope='row';name.textContent=task.task;row.append(name);const best=Math.max(...task.values);for(const value of task.values){const cell=document.createElement('td');const content=value===best?document.createElement('strong'):cell;content.textContent=value.toFixed(1)+'%';if(content!==cell)cell.append(content);row.append(cell)}document.querySelector('#task-rows').append(row)}
+const video=document.querySelector('#demo-video');
+const chapters=[...document.querySelectorAll('.chapters [data-time]')];
+for(const button of document.querySelectorAll('[data-time]'))button.addEventListener('click',()=>{video.currentTime=Number(button.dataset.time);video.play().catch(()=>{});video.focus({preventScroll:true});if(button.closest('.real-robot'))document.querySelector('#demo').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})});
+video.addEventListener('timeupdate',()=>{let active=chapters[0];for(const chapter of chapters)if(video.currentTime>=Number(chapter.dataset.time))active=chapter;for(const chapter of chapters)chapter.classList.toggle('active',chapter===active)});
+const dialog=document.querySelector('#figure-dialog');
+const dialogImage=dialog.querySelector('img');
+document.querySelector('#expand-method').addEventListener('click',()=>{dialogImage.src='assets/method.png';dialogImage.alt='Expanded EventSync method figure';dialog.showModal()});
+dialog.querySelector('.dialog-close').addEventListener('click',()=>dialog.close());
+dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close()});
+document.querySelector('#copy-citation').addEventListener('click',async()=>{const text=document.querySelector('#bibtex').textContent;const status=document.querySelector('#copy-status');try{await navigator.clipboard.writeText(text);status.textContent='Copied to clipboard.'}catch{const range=document.createRange();range.selectNodeContents(document.querySelector('#bibtex'));const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);status.textContent='Citation selected. Use your browser’s copy command.'}});
