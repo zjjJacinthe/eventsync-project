@@ -40,7 +40,8 @@ nav a:hover{color:var(--green)}
 .correspondence{font-size:12px;margin-top:8px}
 .correspondence a{color:var(--green);text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
 .hero-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;width:600px;max-width:100%;margin:28px auto 0}
-.button{border:1px solid var(--line);border-radius:5px;transition:background .15s}
+.button{background:#e0e7dd;border:1px solid #9eada2;border-radius:5px;transition:background .15s,border-color .15s}
+.hero-links a.resource-entry:hover{background:#d2ddce;border-color:#789380}
 .hero-links .resource-entry{min-width:0;min-height:72px;padding:12px 8px;display:grid;grid-template-rows:22px 15px;align-content:center;justify-items:center;gap:3px}
 .button.primary{background:var(--green);border-color:var(--green);color:white}
 .button.primary:hover{background:#275541}
